@@ -85,11 +85,17 @@ jobs:
         #   java -jar spotbugs-4.8.3/spotbugs-4.8.3.tar -textui -xml -output spotbugs_report.xml gdx-ai/target
         #   mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
 
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: spotbugs-xml
+          path: |
+            target/spotbugsXml.xml
+
       - name: List files and folders
         run: ls -alh 
 
-      - name: List files and folders
-        run: ls -alh target
+
 
 
 #      - name: Upload SARIF file
@@ -116,19 +122,13 @@ jobs:
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }} 
         with:
           args: 
-            -Dsonar.projectKey=${{ secrets.WSVD_SONAR_PROJECT_KEY }}  
-            -Dsonar.java.binaries="target"
+            -Dsonar.projectKey=${{ secrets.GDXAI_SONAR_PROJECT_KEY }}  
+            -Dsonar.java.binaries="gdx-ai/build"
 
 
       - name: List files and folders
         run: ls -alh 
 
-      - name: List files and folders
-        run: ls -alh target
 
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: spotbugs-xml
-          path: |
-            target/spotbugsXml.xml
+
+
