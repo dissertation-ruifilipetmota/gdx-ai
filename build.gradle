@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.spotbugs' version '4.8.3.2' // Use the latest SpotBugs plugin version available
+    id 'com.github.spotbugs' version '4.0.8' // Use the latest SpotBugs plugin version available
 }
 
 allprojects {
