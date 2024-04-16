@@ -1,14 +1,11 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
+plugins {
+    id 'java'
+    id 'com.github.spotbugs' version '6.0.12' // Use the latest SpotBugs plugin version available
 }
 
 allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
-    apply plugin: 'java'
 
     repositories {
         mavenCentral()
@@ -19,11 +16,11 @@ allprojects {
 }
 
 ext {
-	projectGroup = "gdx-ai"
-	gdxVersion = '1.9.8'
+    projectGroup = "gdx-ai"
+    gdxVersion = '1.9.8'
 }
 
-/** needed to disable Java 8 doclint which throws errors **/
+// Custom configuration for Java 8 Javadoc to avoid doclint errors
 if (JavaVersion.current().isJava8Compatible()) {
     allprojects {
         tasks.withType(Javadoc) {
@@ -32,19 +29,40 @@ if (JavaVersion.current().isJava8Compatible()) {
     }
 }
 
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'com.github.spotbugs'
+    
+    // Configure SpotBugs tasks
+    spotbugs {
+        toolVersion = '4.0.6' // Specify the SpotBugs version you wish to use
+        // additional configurations
+    }
+
+    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+        reports {
+            html {
+                enabled = true
+                destination file("$buildDir/reports/spotbugs/spotbugs.html")
+            }
+            xml.enabled = false
+        }
+    }
+}
+
 project(":gdx-ai") {
-    apply from : '../publish.gradle'
+    apply from: '../publish.gradle'
 
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     }
 }
 
 project(":tests") {
     dependencies {
-        compile project(":gdx-ai")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        implementation project(":gdx-ai")
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }
 
