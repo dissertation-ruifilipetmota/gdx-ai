@@ -77,7 +77,10 @@ jobs:
           
 
       - name: Run SpotBugs
-        run: mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
+        run: |
+            wget -qO- https://github.com/spotbugs/spotbugs/releases/download/4.7.0/spotbugs-4.8.3.tgz | tar -xz
+
+            ./spotbugs-4.7.0/bin/spotbugs -textui -xml -output spotbugs_report.xml ${{ github.workspace }}/build/classes/java/main
 
       - name: List files and folders
         run: ls -alh 
