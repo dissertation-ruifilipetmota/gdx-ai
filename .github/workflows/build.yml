@@ -90,7 +90,7 @@ jobs:
         with:
           name: spotbugs-xml
           path: |
-            target/spotbugs_report.xml
+            spotbugs_report.xml
 
       - name: List files and folders
         run: ls -alh 
