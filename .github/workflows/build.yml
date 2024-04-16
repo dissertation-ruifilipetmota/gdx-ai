@@ -57,24 +57,11 @@ jobs:
       - name: List Target Directories
         run: |
             find . -type d -name "target" | grep -v "/\." | sed 's|^./||'
-            ls maven/target
       - name: List Source Directories
         run: |
           find . -type d -name "src" | grep -v "/\." | sed 's|^./||'
 
-      - name: Prepare Bazel
-        uses: bazelbuild/setup-bazelisk@v3
-      - name: Mount bazel cache  # Optional
-        uses: actions/cache@v4
-        with:
-          path: "~/.cache/bazel"
-          key: bazel
 
-
-      - name: Build
-        run: |
-            cd java
-            bazel build //...
 
       - name: Check directory
         run: |
