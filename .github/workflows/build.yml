@@ -78,7 +78,7 @@ jobs:
 
       - name: Run SpotBugs
         run: |
-            wget -qO- https://github.com/spotbugs/spotbugs/releases/download/4.7.0/spotbugs-4.8.3.tgz | tar -xz
+            wget -qO- https://github.com/spotbugs/spotbugs/releases/download/4.8.3/spotbugs-4.8.3.tgz | tar -xz
 
             ./spotbugs-4.7.0/bin/spotbugs -textui -xml -output spotbugs_report.xml ${{ github.workspace }}/build/classes/java/main
 
