@@ -79,7 +79,7 @@ jobs:
       - name: Run SpotBugs
         run: |
             wget -qO- https://github.com/spotbugs/spotbugs/releases/download/4.8.3/spotbugs-4.8.3.tgz | tar -xz
-            ls spotbugs-4.8.3
+            ls spotbugs-4.8.3/bin
             java -jar spotbugs-4.8.3/spotbugs-4.8.3.tar -textui -xml -output spotbugs_report.xml gdx-ai/target
         #   mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs
 
