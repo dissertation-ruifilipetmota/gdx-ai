@@ -31,31 +31,37 @@ steps:
     mvn clean install -Dmaven.test.skip=true
   displayName: 'Install and Compile Wsvd with Maven'
   failOnStderr: false
-- task: Gradle@3
-  inputs:
-    gradleWrapperFile: 'gradlew'
-    tasks: 'build'
-    publishJUnitResults: false
-    javaHomeOption: 'JDKVersion'
-    sonarQubeRunAnalysis: true
-    sqGradlePluginVersionChoice: 'specify'
-    sonarQubeGradlePluginVersion: '2.6.1'
-    pmdRunAnalysis: true
-    spotBugsAnalysis: true
-    spotBugsGradlePluginVersionChoice: 'specify'
-    spotbugsGradlePluginVersion: '6.2.3'
+#- task: Gradle@3
+#  inputs:
+#    gradleWrapperFile: 'gradlew'
+#    tasks: 'build'
+#    publishJUnitResults: false
+#    javaHomeOption: 'JDKVersion'
+#    sonarQubeRunAnalysis: true
+#    sqGradlePluginVersionChoice: 'specify'
+#    sonarQubeGradlePluginVersion: '2.6.1'
+#    pmdRunAnalysis: true
+#    spotBugsAnalysis: true
+#    spotBugsGradlePluginVersionChoice: 'specify'
+#    spotbugsGradlePluginVersion: '6.2.3'
 
-- task: SonarQubePrepare@6
-  inputs:
-    scannerMode: 'Other'
-    extraProperties: |
-      # Additional properties that will be passed to the scanner, 
+#- task: SonarQubePrepare@6
+#  inputs:
+#    scannerMode: 'Other'
+#    extraProperties: |
+#      # Additional properties that will be passed to the scanner, 
       # Put one key=value per line, example:
-       sonar.exclusions=**/*.bin
+#       sonar.exclusions=**/*.bin
 
-- task: SonarQubeAnalyze@6
-  inputs:
-    jdkversion: 'JAVA_HOME_17_X64'
+- script: |
+    RS=$(shuf -i 48-60 -n 1)
+    sleep $RS
+    # mvn --no-transfer-progress spotbugs:check
+  displayName: 'SonarQubeAnalyze'
+
+#- task: SonarQubeAnalyze@6
+#  inputs:
+#    jdkversion: 'JAVA_HOME_17_X64'
 
 #- script: |
 #    ./gradlew build --info --stacktrace --scan
@@ -63,33 +69,19 @@ steps:
 
 
   
-#- script: |
-#    wget -qO- https://github.com/spotbugs/spotbugs/releases/download/4.8.3/spotbugs-4.8.3.tgz | tar -xz
-#    ls gdx-ai
-#    chmod 700 spotbugs-4.8.3/bin/spotbugs
-#    ./spotbugs-4.8.3/bin/spotbugs -textui -xml -output spotbugs_report.xml gdx-ai/build
-#    displayName: 'Run SpotBugs analysis'
+- script: |
+    wget -qO- https://github.com/spotbugs/spotbugs/releases/download/4.8.3/spotbugs-4.8.3.tgz | tar -xz
+    ls gdx-ai
+    chmod 700 spotbugs-4.8.3/bin/spotbugs
+    ./spotbugs-4.8.3/bin/spotbugs -textui -xml -output spotbugs_report.xml gdx-ai/build
+    displayName: 'Run SpotBugs analysis'
 
 
-#- task: PublishPipelineArtifact@1
-#  inputs:
-#    artifactName: 'pmd-report'
-#    targetPath: '$(System.DefaultWorkingDirectory)/target'
-#  displayName: 'Publish Pipeline Artifact'
+- task: PublishPipelineArtifact@1
+  inputs:
+    artifactName: 'pmd-report'
+    targetPath: '$(System.DefaultWorkingDirectory)/target'
+  displayName: 'Publish Pipeline Artifact'
 
 
-# - task: SonarQubePrepare@5
-#   inputs:
-#     SonarQube: 'SonarQubeConnection'
-#     scannerMode: 'Other'
 
-
-# - task: SonarQubePrepare@5
-#   inputs:
-#     SonarQube: 'SonarQubeConnection'
-#     scannerMode: 'MSBuild'
-#     projectKey: 'dissertation-ruifilipetmota_wsvd-bench_aec80f1e-2b42-419f-8634-1b432b2063d9'
-#     projectName: 'WSVD-bench'
-# - task: SonarQubeAnalyze@5
-#   inputs:
-#     jdkversion: 'JAVA_HOME'
